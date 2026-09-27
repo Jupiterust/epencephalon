@@ -1,0 +1,46 @@
+{
+    // ── 编辑器外观（你原有的配置，原样保留）────────────────────────
+    "editor.cursorSmoothCaretAnimation": "on",   // 光标移动时平滑滑动
+    "editor.cursorBlinking": "smooth",            // 闪烁改成平滑呼吸，可选 expand / phase
+    "editor.smoothScrolling": true,               // 顺带把滚动也平滑掉
+    "editor.cursorStyle": "line",                 // 光标样式，想要粗一点可配 cursorWidth
+    // 额外推荐
+    "editor.cursorWidth": 3,                    // 只有 cursorStyle 为 line 时生效，数值越大越粗（默认 0）
+    "editor.cursorSurroundingLines": 5,         // 光标上下至少保留几行可见（类似 scrollOffset）
+    "editor.cursorSurroundingLinesStyle": "all", // default | all（all 时鼠标点击也会强制保留）
+
+    // 终端光标（可选）
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.cursorWidth": 2,
+    "terminal.integrated.cursorBlinking": true,
+
+    // ── Cortex-Debug（你原有的配置）──────────────────────────────
+    // macOS 下 VS Code 从 Dock 启动时不一定继承 shell 的 PATH，
+    // 所以这两个绝对路径很重要，别删。
+    "cortex-debug.gdbPath": "/opt/homebrew/bin/arm-none-eabi-gdb",
+    "cortex-debug.openocdPath": "/opt/homebrew/bin/openocd",
+
+    // ── CMake Tools ────────────────────────────────────────────
+    // 工程里有 CMakePresets.json，强制走 presets 模式：
+    // 这样不需要选 kit，工具链固定由 cmake/gcc-arm-none-eabi.cmake 决定
+    "cmake.useCMakePresets": "always",
+    "cmake.configureOnOpen": true,
+    "cmake.options.statusBarVisibility": "visible",
+
+    // ── IntelliSense ───────────────────────────────────────────
+    // 让 C/C++ 插件从 CMake Tools 取包含路径和宏定义
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+
+    // ── 搜索/资源管理器降噪 ─────────────────────────────────────
+    // HAL 和 FreeRTOS 有 1400+ 个文件，全局搜索时会淹没自己的代码。
+    // 只是从搜索里排除，跳转定义（F12）不受影响。
+    "search.exclude": {
+        "**/build": true,
+        "**/Drivers/STM32F4xx_HAL_Driver": true,
+        "**/Drivers/CMSIS": true,
+        "**/Middlewares": true
+    },
+    "files.associations": {
+        "*.ioc": "ini"
+    }
+}

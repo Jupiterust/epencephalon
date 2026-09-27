@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------------
+# Build output
+# ---------------------------------------------------------------------------
+# CMakePresets puts every build tree under build/<preset>/. compile_commands
+# .json, the .map, the post-build .hex/.bin and every .su from -fstack-usage
+# all live in there, so one rule covers them.
+/build/
+
+# Belt and braces for anything built outside the preset tree.
+*.o
+*.obj
+*.d
+*.su
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+
+# ---------------------------------------------------------------------------
+# STM32CubeMX
+# ---------------------------------------------------------------------------
+# .mxproject IS tracked: it is how CubeMX knows what it generated last time,
+# and losing it makes the next regeneration far messier. Same for the whole
+# generated tree (Core/, Drivers/, Middlewares/, FATFS/, the linker script and
+# the startup file) -- without them a fresh clone cannot build without running
+# CubeMX first.
+#
+# What is not tracked is CubeMX's scratch and the *_save copies it leaves when
+# it rewrites a file it had generated before.
+mx.scratch
+*_save
+*.ioc.bak*
+
+# ---------------------------------------------------------------------------
+# Editor / OS
+# ---------------------------------------------------------------------------
+# .vscode/ IS tracked on purpose: tasks.json, launch.json and the two absolute
+# tool paths in settings.json are what make build-flash-debug work here, and
+# .vscode/STM32F427.svd (official ST, Apache-2.0) drives the peripheral
+# viewer. See CLAUDE.md.
+.DS_Store
+*.swp
+*~

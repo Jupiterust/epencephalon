@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "调试 (DAP-Link)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug/epencephalon.elf",
+      "device": "STM32F427II",
+      // 复用根目录的 openocd.cfg，和「烧录」任务用的是同一套参数
+      "configFiles": ["${workspaceFolder}/openocd.cfg"],
+      // 外设寄存器查看器（Cortex-Debug 侧边栏的 XPERIPHERALS）
+      "svdFile": "${workspaceFolder}/.vscode/STM32F427.svd",
+      "preLaunchTask": "编译 (Debug)",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none"
+
+      // FreeRTOS 线程视图由 mcu-debug.rtos-views 插件提供（已装），
+      // 会自己出现在调试面板里，不需要在这里配 "rtos"。
+      //
+      // 这里故意不写 "rtos": "FreeRTOS"：那会让 OpenOCD 在 target 上挂
+      // RTOS 感知，而停在 main 时调度器还没启动，符号读不全，
+      // 经常表现为连接卡住或线程列表报错。等真有多任务要调再按需打开。
+    },
+    {
+      "name": "附加到运行中的板子",
+      "type": "cortex-debug",
+      "request": "attach",
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/Debug/epencephalon.elf",
+      "device": "STM32F427II",
+      "configFiles": ["${workspaceFolder}/openocd.cfg"],
+      "svdFile": "${workspaceFolder}/.vscode/STM32F427.svd",
+      "showDevDebugOutput": "none"
+      // 不烧录、不复位，接上去看当前状态。查死机/跑飞时用。
+    }
+  ]
+}

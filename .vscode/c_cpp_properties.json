@@ -1,0 +1,30 @@
+{
+  "version": 4,
+  "configurations": [
+    {
+      "name": "STM32F427 (ARM GCC)",
+      // 首选：包含路径和宏由 CMake Tools 实时提供，改了 .ioc 重新配置后自动跟上
+      "configurationProvider": "ms-vscode.cmake-tools",
+      // 兜底：CMake Tools 没起来时用 compile_commands.json
+      "compileCommands": "${workspaceFolder}/build/Debug/compile_commands.json",
+      // 必须指向交叉编译器，否则 IntelliSense 会拿 macOS 的 clang 去解析
+      // CMSIS 的内联汇编和 __attribute__，满屏红波浪线
+      "compilerPath": "/opt/homebrew/bin/arm-none-eabi-gcc",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "linux-gcc-arm",
+      // 下面两项只在首次配置前（build/ 还不存在时）兜底用
+      "defines": ["USE_HAL_DRIVER", "STM32F427xx", "DEBUG"],
+      "includePath": [
+        "${workspaceFolder}/Core/Inc",
+        "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc",
+        "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
+        "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
+        "${workspaceFolder}/Drivers/CMSIS/Include",
+        "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/include",
+        "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2",
+        "${workspaceFolder}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"
+      ]
+    }
+  ]
+}

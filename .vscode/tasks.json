@@ -1,0 +1,64 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "配置 (Debug)",
+      "type": "shell",
+      "command": "cmake --preset Debug",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "detail": "生成 build/Debug/ 构建树。改了 .ioc 重新生成代码后要跑一次。"
+    },
+    {
+      "label": "编译 (Debug)",
+      "type": "shell",
+      "command": "cmake --build --preset Debug",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": ["$gcc"],
+      "detail": "默认编译任务（⇧⌘B）。产物：build/Debug/epencephalon.elf / .hex / .bin"
+    },
+    {
+      "label": "编译 (Release)",
+      "type": "shell",
+      "command": "cmake --preset Release && cmake --build --preset Release",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "清理",
+      "type": "shell",
+      "command": "cmake --build --preset Debug --target clean",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "重新配置 (删掉 build 重来)",
+      "type": "shell",
+      "command": "rm -rf build && cmake --preset Debug",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "detail": "CubeMX 增删了源文件、CMake 缓存对不上时用这个。"
+    },
+    {
+      "label": "烧录",
+      "type": "shell",
+      "command": "openocd -f openocd.cfg -c \"program build/Debug/epencephalon.elf verify reset exit\"",
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": "编译 (Debug)",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "detail": "先编译再烧录，烧完自动复位运行。不进调试器。"
+    },
+    {
+      "label": "全片擦除",
+      "type": "shell",
+      "command": "openocd -f openocd.cfg -c \"init; reset halt; stm32f2x mass_erase 0; exit\"",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "芯片被读保护/程序跑飞连不上时的急救手段。F4 系列的 flash 驱动就叫 stm32f2x。"
+    }
+  ]
+}
